@@ -1,1 +1,46 @@
-# graphics for chess
+import pygame
+import sys
+
+pygame.init()
+
+WIDTH, HEIGHT = 1920, 1080
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("5D Chess Alpha")
+
+# cosmetic var
+tile_size = 100
+start_x = 50
+start_y = 50
+colset_light = [(255,255,255), (0,0,0), (245,245,220)] # bg color, black tiles, white tiles
+colset_dark = [(60,60,80), (0,0,0), (180,180,200)] # bg color, black tiles, white tiles
+
+# placeholder, make this selectable
+colors = colset_dark
+
+def draw_grid(tile_size, start_x, start_y, colors):
+	for i in range(8):
+		for j in range(8):
+			x = start_x + i * tile_size
+			y = start_y + j * tile_size
+			if (i + j) % 2 == 0:
+				pygame.draw.rect(window, colors[1], (x, y, tile_size, tile_size))
+			else:
+				pygame.draw.rect(window, colors[2], (x, y, tile_size, tile_size))
+
+running = True
+while running:
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			running = False
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			if event.button == 1:
+				mouse_x, mouse_y = event.pos
+				if square_x <= mouse_x <= square_x + square_size and square_y <= mouse_y <= square_y + square_size:
+					square_color = (0, 255, 0)
+
+	window.fill((colors[0]))
+	draw_grid(tile_size,start_x,start_y,colors)
+	pygame.display.flip()
+
+pygame.quit()
+sys.exit()
