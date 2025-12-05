@@ -3,21 +3,21 @@ import sys
 
 pygame.init()
 
-WIDTH, HEIGHT = 1920, 1080
+WIDTH, HEIGHT = 2560, 1536
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("5D Chess Alpha")
 
 # cosmetic var
-tile_size = 100
-start_x = 50
-start_y = 50
-colset_light = [(255,255,255), (0,0,0), (245,245,220)] # bg color, black tiles, white tiles
+tile_size = WIDTH//18
+start_x, start_y = WIDTH//16, HEIGHT//12
+colset_light = [(255,255,255), (56,25,0), (245,235,200)] # bg color, black tiles, white tiles
 colset_dark = [(60,60,80), (0,0,0), (180,180,200)] # bg color, black tiles, white tiles
+font = pygame.font.Font(None, WIDTH//48)
 
 # placeholder, make this selectable
-colors = colset_dark
+colors = colset_light
 
-def draw_grid(tile_size, start_x, start_y, colors):
+def draw_grid(window, tile_size, start_x, start_y, colors):
 	for i in range(8):
 		for j in range(8):
 			x = start_x + i * tile_size
@@ -26,6 +26,10 @@ def draw_grid(tile_size, start_x, start_y, colors):
 				pygame.draw.rect(window, colors[1], (x, y, tile_size, tile_size))
 			else:
 				pygame.draw.rect(window, colors[2], (x, y, tile_size, tile_size))
+		letter_row_tile = font.render(chr(65+i), True, colors[1])
+		number_row_tile = font.render(str(i+1), True, colors[1])
+		window.blit(letter_row_tile, (start_x + i * tile_size + tile_size//2.2, start_y + tile_size * 8 + tile_size//4)) # this is really bad code
+		window.blit(number_row_tile, (start_x - tile_size//2.5, start_y + i * tile_size + tile_size//2.5)) # ...but it works so i dont care
 
 running = True
 while running:
@@ -39,7 +43,7 @@ while running:
 					square_color = (0, 255, 0)
 
 	window.fill((colors[0]))
-	draw_grid(tile_size,start_x,start_y,colors)
+	draw_grid(window, tile_size,start_x,start_y,colors)
 	pygame.display.flip()
 
 pygame.quit()
