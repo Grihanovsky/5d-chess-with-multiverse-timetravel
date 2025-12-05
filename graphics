@@ -3,7 +3,8 @@ import sys
 
 pygame.init()
 
-WIDTH, HEIGHT = 2560, 1536
+info = pygame.display.Info()
+WIDTH, HEIGHT = info.current_w, info.current_h
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("5D Chess Alpha")
 
@@ -36,7 +37,6 @@ while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
-
 	window.fill((colors[0]))
 	draw_grid(window, tile_size,start_x,start_y,colors)
 	pygame.display.flip()
