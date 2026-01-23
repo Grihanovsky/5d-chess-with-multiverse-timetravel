@@ -8,15 +8,19 @@ WIDTH, HEIGHT = info.current_w, info.current_h
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("5D Chess Alpha")
 
+import textures
+
 # cosmetic var
 tile_size = WIDTH//18
 start_x, start_y = WIDTH//16, HEIGHT//12
-colset_light = [(255,255,255), (56,25,0), (245,235,200)] # bg color, black tiles, white tiles
-colset_dark = [(60,60,80), (0,0,0), (180,180,200)] # bg color, black tiles, white tiles
+colset_light = [(255, 255, 255), (56, 25, 0), (245, 235, 200), (0, 0, 0)] # bg color, black tiles, white tiles, text color
+colset_dark = [(60, 60, 80), (0, 0, 0), (180, 180, 200), (255, 255, 255)]	
 font = pygame.font.Font(None, WIDTH//48)
 
 # placeholder, make this selectable
 colors = colset_light
+bulb, bulb_rect = textures.ui_light[0][0], textures.ui_light[1][0]
+king_white = textures.pieces[0]
 
 def draw_grid(window, tile_size, start_x, start_y, colors):
 	for i in range(8):
@@ -27,8 +31,9 @@ def draw_grid(window, tile_size, start_x, start_y, colors):
 				pygame.draw.rect(window, colors[1], (x, y, tile_size, tile_size))
 			else:
 				pygame.draw.rect(window, colors[2], (x, y, tile_size, tile_size))
-		letter_row_tile = font.render(chr(65+i), True, colors[1])
-		number_row_tile = font.render(str(i+1), True, colors[1])
+		#letters & numbers on sides
+		letter_row_tile = font.render(chr(65+i), True, colors[3])
+		number_row_tile = font.render(str(i+1), True, colors[3])
 		window.blit(letter_row_tile, (start_x + i * tile_size + tile_size//2.2, start_y + tile_size * 8 + tile_size//4)) # this is really bad code
 		window.blit(number_row_tile, (start_x - tile_size//2.5, start_y + i * tile_size + tile_size//2.5)) # ...but it works so i dont care
 
@@ -37,8 +42,18 @@ while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
+		elif event.type == pygame.MOUSEBUTTONDOWN:
+			if bulb_rect.collidepoint(event.pos):
+				colors = colset_dark if colors == colset_light else colset_light
+				bulb = textures.ui_dark[0][0] if bulb == textures.ui_light[0][0] else textures.ui_light[0][0]
+				bulb_rect = textures.ui_dark[1][0] if bulb == textures.ui_light[1][0] else textures.ui_light[1][0]
+
 	window.fill((colors[0]))
 	draw_grid(window, tile_size,start_x,start_y,colors)
+	
+	window.blit(bulb, (WIDTH-WIDTH//20, HEIGHT//30))
+	#	window.blit(king_white, (300, 200))
+	#	this is format for all the pieces grigory if you connect graphics to logic do it with this
 	pygame.display.flip()
 
 pygame.quit()
