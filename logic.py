@@ -20,7 +20,7 @@ class Pawn: # moves finished
             # an if condition for taking the pieces on the diagonal tiles.
 
             return move_list
-
+            # add a useless comment
 class Rook: # moves finished
     def __init__(self,on_board,position,colour):
         self.on_board = on_board
