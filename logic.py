@@ -27,6 +27,8 @@
 # board[i][j] = nnn-w-?-? = "Name-colour_of_the_cell-attacked_by_white-attacked_by_black"
 # nnn-w-0-1 means that the cell is NOT attacked by white, but is attacked by black
 
+BLACK_UP = False
+
 class Piece:
     def __init__(self,on_board,position,name):
         self.on_board = on_board
@@ -34,23 +36,65 @@ class Piece:
         self.ever_moved = False
         self.name = name
 
-    def possible_moves_pawn(self):        # does not work at all
+    def possible_moves_pawn(self,board): # works, but no en passant
 
         if self.on_board:
             move_list = []
-            if self.colour == "w" and self.position[0] == 6:
-                move_list.append(f"{self.position[0]-1},{self.position[1]}") # does not work, there is not such thing as self.colour
-                move_list.append(f"{self.position[0]-2},{self.position[1]}")       
-            elif self.colour == "b" and self.position[0] == 1:
-                move_list.append(f"{self.position[0]+1},{self.position[1]}")
-                move_list.append(f"{self.position[0]+2},{self.position[1]}")
-            elif self.colour == "w":
-                move_list.append(f"{self.position[0]-1},{self.position[1]}")
-            elif self.colour == "b":
-                move_list.append(f"{self.position[0]+1},{self.position[1]}")
+            if BLACK_UP:
+                print(self.name[0])
+                if self.name[0] == "W":
+                    if self.position[0] == 6:
+                        move_list.append(f"{self.position[0]-1},{self.position[1]}") # does not work, there is not such thing as self.colour
+                        move_list.append(f"{self.position[0]-2},{self.position[1]}")
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
+
+                    else:
+                        move_list.append(f"{self.position[0]-1},{self.position[1]}") 
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
+
+                else:
+                    if self.position[0] == 1:
+                        move_list.append(f"{self.position[0]+1},{self.position[1]}")
+                        move_list.append(f"{self.position[0]+2},{self.position[1]}")
+                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+
+                    else:
+                        move_list.append(f"{self.position[0]+1},{self.position[1]}")
+                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+
+            else:
+                if self.name[0] == "W":
+                    if self.position[0] == 1:
+                        move_list.append(f"{self.position[0]+1},{self.position[1]}")
+                        move_list.append(f"{self.position[0]+2},{self.position[1]}")
+                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
+                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
+
+                    else:
+                        move_list.append(f"{self.position[0]+1},{self.position[1]}") 
+                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
+                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
+
+
+                else:
+                    if self.position[0] == 6:
+                        move_list.append(f"{self.position[0]-1},{self.position[1]}")
+                        move_list.append(f"{self.position[0]-2},{self.position[1]}")
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+
+                    else:
+                        move_list.append(f"{self.position[0]-1},{self.position[1]}")
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+
             # an if condition for taking the pieces on the diagonal tiles.
 
-            return move_list
+            return move_list,board
     def possible_moves_rook(self,board): # works completely
         if self.on_board:
             move_list = []
@@ -317,8 +361,8 @@ class Piece:
 
 class Pawn(Piece): # moves finished, need to solve the promoted issue
 
-    def possible_moves(self):
-        return self.possible_moves_pawn() # returns only the move_list
+    def possible_moves(self,board):
+        return self.possible_moves_pawn(board) # returns only the move_list
 class Rook(Piece): # moves finished
 
     def possible_moves(self,board):
@@ -520,7 +564,7 @@ board = [['BRA-w-?-?', 'BKB-b-?-?', 'BBC-w-?-?', 'BQQ-b-?-?', 'BKK-w-?-?', 'BBF-
          ['WPA-w-?-?', 'WPB-b-?-?', 'WPC-w-?-?', 'WPD-b-?-?', 'WPE-w-?-?', 'WPF-b-?-?', 'WPG-w-?-?', 'WPH-b-?-?'],
          ['WRA-b-?-?', 'WRH-w-?-?', 'WKB-b-?-?', 'WKG-w-?-?', 'WBC-b-?-?', 'WBF-w-?-?', 'WQQ-b-?-?', 'WKK-w-?-?']]
 
-WBC = Rook(True, (4,4),"BKK")
+WBC = Pawn(True, (6,4),"BKK")
 move_list,board = WBC.possible_moves(board)
 print(move_list)
 
