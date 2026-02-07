@@ -375,7 +375,7 @@ class Bishop(Piece): # moves finished
     def possible_moves(self, board):
         return self.possible_moves_bishop(board) # returns the board too
 class Queen(Piece): # moves finished
-    def possible_moves(self):
+    def possible_moves(self,board):
         move_list1, b = self.possible_moves_bishop(board)
         move_list2, b = self.possible_moves_rook(board)
 
@@ -400,7 +400,7 @@ class King(Piece): # moves finished
                 board[0][5] = board[0][5].replace("nnn",f"{self.name[0]}RH")
                 self.ever_moved = True # the pieces need to find themselves
         return board
-    def long_castling(self,new_coords, board): # not debugged
+    def long_castling(self,new_coords, board, Pieces): # not debugged
 
         if new_coords == (7,2):
                 board[7][2] = board[7][2].replace("nnn",self.name)
@@ -550,7 +550,7 @@ def Create_Pieces(): # finished
 
     return WRA, WRH, BRA, BRH, WKB, WKG, BKB, BKG, WBC, WBF, BBC, BBF, WQQ, BQQ, WKK, BKK, WPA, WPB, WPC, WPD, WPE, WPF, WPG, WPH, BPA, BPB, BPC, BPD, BPE, BPF, BPG, BPH
 
-
+'''
 board = Board_set_up(8, True)
 Pieces = []
 Pieces = Create_Pieces()
@@ -570,7 +570,7 @@ print(move_list)
 
 for i in range(len(board)):
     print(board[i])
-
+'''
 
 
 # allow for multiple boards by turning the coords from the init into a list
