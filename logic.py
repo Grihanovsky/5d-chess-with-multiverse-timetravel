@@ -512,7 +512,7 @@ def Create_Pieces(black_is_up): # finished
     if black_is_up:
         Dictionary = {"WW":7,"BW":1,"A":0,"B":1,"C":2,"D":3,"E":4,'F':5,'G':6,'H':7,"Q":3,"K":4}
     else:
-        Dictionary = {"WW":1,"BW":7,"A":7,"B":6,"C":5,"D":4,"E":3,'F':2,'G':1,'H':0,"Q":4,"K":3}
+        Dictionary = {"WW":0,"BW":8,"A":7,"B":6,"C":5,"D":4,"E":3,'F':2,'G':1,'H':0,"Q":4,"K":3}
 
     for i in range(len(Pieces_list)):
         name = Pieces_list[i]
@@ -527,7 +527,16 @@ def Create_Pieces(black_is_up): # finished
         elif Pieces_list[i][1] == "Q":
             name = Queen(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
         elif Pieces_list[i][1] == "P":
-            name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+            
+            
+            if black_is_up == False and Pieces_list[i][0] == "B": # It needs to be this way, trust me
+                name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]-2,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+            elif black_is_up == False and Pieces_list[i][0] == "W":
+                name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]+2,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+            else:
+                name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+        
+        
         New_pieces_list.append(name)
     return New_pieces_list
 

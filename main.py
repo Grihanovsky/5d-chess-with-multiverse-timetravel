@@ -46,6 +46,8 @@ while running:
 					Black_is_up = False
 				else:
 					Black_is_up = True
+				Pieces = logic.Create_Pieces(Black_is_up)
+
 
 	window.fill(colours[0])
 
