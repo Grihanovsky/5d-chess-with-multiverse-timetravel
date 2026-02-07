@@ -506,49 +506,31 @@ def Board_set_up(size,black_up): # finished
                     
     return board
 
-    # function that checks whether a king is mated
-    return 
-def Create_Pieces(): # finished
-    WRA = Rook(True, (0,7),"WRA")
-    WRH = Rook(True, (7,7),"WRH")
-    BRA = Rook(True, (0,0),"BRA")
-    BRH = Rook(True, (7,0),"BRH")
+def Create_Pieces(black_is_up): # finished
+    Pieces_list = ["WRA","WKB","WBC","WQQ","WKK","WBF","WKG","WRH","BRA","BKB","BBC","BQQ","BKK","BBF","BKG","BRH","WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"] 
+    New_pieces_list = []
+    if black_is_up:
+        Dictionary = {"WW":7,"BW":1,"A":0,"B":1,"C":2,"D":3,"E":4,'F':5,'G':6,'H':7,"Q":3,"K":4}
+    else:
+        Dictionary = {"WW":1,"BW":7,"A":7,"B":6,"C":5,"D":4,"E":3,'F':2,'G':1,'H':0,"Q":4,"K":3}
 
-    WKB = Knight(True, (1,7),"WKB")
-    WKG = Knight(True, (6,7),"WKG")
-    BKB = Knight(True, (1,0),"BKB")
-    BKG = Knight(True, (6,0),"BKG")
+    for i in range(len(Pieces_list)):
+        name = Pieces_list[i]
+        if Pieces_list[i][1] == "R":
+            name = Rook(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+        elif Pieces_list[i][1] == "K" and Pieces_list[i][2] != "K":
+            name = Knight(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+        elif Pieces_list[i][1] == "K" and Pieces_list[i][2] == "K":
+            name = King(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+        elif Pieces_list[i][1] == "B":
+            name = Bishop(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+        elif Pieces_list[i][1] == "Q":
+            name = Queen(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+        elif Pieces_list[i][1] == "P":
+            name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+        New_pieces_list.append(name)
+    return New_pieces_list
 
-    WBC = Bishop(True, (2,7),"WBC")
-    WBF = Bishop(True, (5,7),"WBF")
-    BBC = Bishop(True, (2,0),"BBC")
-    BBF = Bishop(True, (5,0),"BBF")
-
-    WQQ = Queen(True, (3,7),"WQQ")
-    BQQ = Queen(True, (3,0),"BQQ")
-
-    WKK = King(True, (4,7),"WKK")
-    BKK = King(True, (4,0),"BKK")
-
-    WPA = Pawn(True, (0,1),"WPA")
-    WPB = Pawn(True, (1,1),"WPB")
-    WPC = Pawn(True, (2,1),"WPC")
-    WPD = Pawn(True, (3,1),"WPD")
-    WPE = Pawn(True, (4,1),"WPE")
-    WPF = Pawn(True, (5,1),"WPF")
-    WPG = Pawn(True, (6,1),"WPG")
-    WPH = Pawn(True, (7,1),"WPH")
-
-    BPA = Pawn(True, (0,1),"BPA")
-    BPB = Pawn(True, (1,1),"BPB")
-    BPC = Pawn(True, (2,1),"BPC")
-    BPD = Pawn(True, (3,1),'BPD')
-    BPE = Pawn(True, (4,1),"BPE")
-    BPF = Pawn(True, (5,1),"BPF")
-    BPG = Pawn(True, (6,1),'BPG')
-    BPH = Pawn(True, (7,1),"BPH")
-
-    return WRA, WRH, BRA, BRH, WKB, WKG, BKB, BKG, WBC, WBF, BBC, BBF, WQQ, BQQ, WKK, BKK, WPA, WPB, WPC, WPD, WPE, WPF, WPG, WPH, BPA, BPB, BPC, BPD, BPE, BPF, BPG, BPH
 
 '''
 board = Board_set_up(8, True)
@@ -571,7 +553,6 @@ print(move_list)
 for i in range(len(board)):
     print(board[i])
 '''
-
 
 # allow for multiple boards by turning the coords from the init into a list
 # to see whether the action is a take, compare the coordinates from the move_list with the coordinates of the board, and 

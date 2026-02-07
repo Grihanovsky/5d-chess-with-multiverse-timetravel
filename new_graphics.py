@@ -62,27 +62,20 @@ def draw_theme_switch(window,switch, x,y):
 def draw_settings_button(window,gear, x,y):
     window.blit(gear, (x,y))
 
-def draw_pieces(window,pieces,x,y,tile_size):
-	window.blit(pieces[9], (x+(tile_size//6),y+(tile_size//7)))
-	window.blit(pieces[7], (x+(tile_size//6)+tile_size,y+(tile_size//7)))
-	window.blit(pieces[5], (x+(tile_size//6)+tile_size*2,y+(tile_size//7)))
-	window.blit(pieces[1], (x+(tile_size//6)+tile_size*3,y+(tile_size//7)))
-	window.blit(pieces[3], (x+(tile_size//6)+tile_size*4,y+(tile_size//7)))
-	window.blit(pieces[5], (x+(tile_size//6)+tile_size*5,y+(tile_size//7)))
-	window.blit(pieces[7], (x+(tile_size//6)+tile_size*6,y+(tile_size//7)))
-	window.blit(pieces[9], (x+(tile_size//6)+tile_size*7,y+(tile_size//7)))
-	for i in range(0,8):
-		window.blit(pieces[11], (x+tile_size*i+(tile_size//6),y+tile_size+(tile_size//7)))
-	window.blit(pieces[8], (x+(tile_size//6),y+tile_size*7+(tile_size//7)))
-	window.blit(pieces[6], (x+(tile_size//6)+tile_size,y+tile_size*7+(tile_size//7)))
-	window.blit(pieces[4], (x+(tile_size//6)+tile_size*2,y+tile_size*7+(tile_size//7)))
-	window.blit(pieces[0], (x+(tile_size//6)+tile_size*3,y+tile_size*7+(tile_size//7)))
-	window.blit(pieces[2], (x+(tile_size//6)+tile_size*4,y+tile_size*7+(tile_size//7)))
-	window.blit(pieces[4], (x+(tile_size//6)+tile_size*5,y+tile_size*7+(tile_size//7)))
-	window.blit(pieces[6], (x+(tile_size//6)+tile_size*6,y+tile_size*7+(tile_size//7)))
-	window.blit(pieces[8], (x+(tile_size//6)+tile_size*7,y+tile_size*7+(tile_size//7)))
-	for i in range(0,8):
-		window.blit(pieces[10], (x+tile_size*i+(tile_size//6),y+tile_size*6+(tile_size//7)))
+def draw_pieces(window,piece_texture,piece, x,y,tile_size):
+	if piece.on_board:
+		if piece.name[1] == "P":
+			if piece.name[0] == "W":
+				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0]-1)))
+			else:
+				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+
+		else:
+			if piece.name[0] == "W":
+				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+			else:
+				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0]-1)))
+
 
 def draw_possible_moves():
     pass
@@ -96,7 +89,9 @@ def load_gui(width, height):
 		ui_dark[0][i], ui_dark[1][i] = load_textures(f"{ui_dark[0][i]}", width, height, width//60, height//60)
 
 
-	pieces = ["king_light","king_black","queen_white","queen_black","bishop_white","bishop_black","knight_white","knight_black","rook_white","rook_black","pawn_white","pawn_black"]
+	#pieces = ["king_light","king_black","queen_white","queen_black","bishop_white","bishop_black","knight_white","knight_black","rook_white","rook_black","pawn_white","pawn_black"]
+	pieces = ["rook_white","knight_white","bishop_white","queen_white","king_light","bishop_white","knight_white","rook_white","rook_black","knight_black","bishop_black","queen_black","king_black","bishop_black","knight_black","rook_black","pawn_white","pawn_black"]
+	print(pieces.index("pawn_white"))
 
 	for i in range(len(pieces)):
 		pieces[i] = load_pieces(f"{pieces[i]}", width, height, width//140, height//140)
