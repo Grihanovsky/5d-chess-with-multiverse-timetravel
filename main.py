@@ -16,7 +16,7 @@ tile_size = WIDTH//18
 start_x, start_y = WIDTH//16, HEIGHT//12
 
 
-colset_light = [(255, 230, 200), (80, 40, 0), (240, 190, 137), (0, 0, 0), (220, 160, 120), (0, 0, 0)] # bg color, black tiles, white tiles, text color
+colset_light = [(255, 230, 200), (80, 40, 0), (240, 190, 137), (255, 255, 255), (220, 160, 120), (0, 0, 0)] # bg color, black tiles, white tiles, text color
 colset_dark = [(60, 60, 80), (0, 0, 0), (180, 180, 200), (255, 255, 255), (200, 200, 220), (50, 50, 50)]	
 colours = colset_dark
 
@@ -33,10 +33,12 @@ Pieces = logic.Create_Pieces(Black_is_up)
 
 board = logic.Board_set_up(8,Black_is_up)
 board_rect = pygame.Rect(start_x, start_y,tile_size*8,tile_size*8)
-turn = 1
+turn = 0
 players = ["W","B"]
 
-printing_possible_moves = False
+selected = False
+selected_piece = ""
+targeted_cells_rects = []
 
 running = True
 while running:
@@ -59,14 +61,27 @@ while running:
 				board = logic.Board_set_up(8,Black_is_up)
 
 			elif board_rect.collidepoint(event.pos):
-				print("hit the board")
+				#print("hit the board")
 				index = logic.find_a_piece_by_position(board, Pieces, start_x, start_y, event.pos, tile_size)
 				if index != None:
 					if players[turn % 2] == Pieces[index].name[0]:
-						print(Pieces[index].name)
-						print(Pieces[index].position)
+						#print(Pieces[index].name)
+						#print(Pieces[index].position)
 						move_list,board = logic.find_possible_moves(Pieces[index],board,Black_is_up)
-						printing_possible_moves = True
+						targeted_cells_rects = logic.find_recs_for_possible_moves(move_list,start_x, start_y,tile_size)
+
+						if selected_piece == Pieces[index].name:
+							selected = False
+							selected_piece = ""
+						else:
+							selected = True
+							selected_piece = Pieces[index].name
+
+			for i in range(len(targeted_cells_rects)):
+				if targeted_cells_rects[i].collidepoint(event.pos):
+					print("there you go")
+					turn += 1
+					selected = False
 
 	window.fill(colours[0])
 
@@ -80,9 +95,9 @@ while running:
 		else:
 			new_graphics.draw_pieces(window,pieces_texture[i],Pieces[i],start_x,start_y,tile_size,Black_is_up)
 
-	if printing_possible_moves:
+	if selected:
 		for i in range(len(move_list)):
-			new_graphics.draw_possible_moves(window, tile_size, start_x, start_y, move_list[i],colours[5])
+			new_graphics.draw_possible_moves(window, tile_size, start_x, start_y, move_list[i],colours[3])
 
 
 	#pygame.draw.rect(window, colours[5], bulb_rect) was here for debugging

@@ -1,4 +1,4 @@
-
+import pygame
 # task list
 # 1. conditions for the casting to be approved to the move_list
 # 2. взятие на проходе
@@ -540,7 +540,12 @@ def find_a_piece_by_position(board, Pieces, start_x, start_y, coordinates, tile_
 def find_possible_moves(Piece,board,BLACK_UP):
     return Piece.possible_moves(board,BLACK_UP)
      
-
+def find_recs_for_possible_moves(move_list,start_x, start_y,tile_size):
+    List_of_rects = []
+    for i in range(len(move_list)):
+        cell_rect = pygame.Rect(start_x + int(move_list[i][2])*tile_size, start_y + int(move_list[i][0])*tile_size,tile_size,tile_size)
+        List_of_rects.append(cell_rect)
+    return List_of_rects
 # allow for multiple boards by turning the coords from the init into a list
 # to see whether the action is a take, compare the coordinates from the move_list with the coordinates of the board, and 
 # if the cell is not empty, draw the thingie

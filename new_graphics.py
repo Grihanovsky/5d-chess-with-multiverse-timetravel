@@ -92,7 +92,7 @@ def draw_pieces(window,piece_texture,piece, x,y,tile_size,black_is_up):
 					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
 
 def draw_possible_moves(window, tile_size, start_x, start_y, cell_attacked,colour):
-	pygame.draw.circle(window, colour, (start_x + tile_size*int(cell_attacked[2])+tile_size//2, start_y + tile_size*int(cell_attacked[0])+tile_size//2), tile_size//4)
+	pygame.draw.circle(window, colour, (start_x + tile_size*int(cell_attacked[2])+tile_size//2, start_y + tile_size*int(cell_attacked[0])+tile_size//2), tile_size//6)
 
 
 def load_gui(width, height):
@@ -108,7 +108,7 @@ def load_gui(width, height):
 	pieces = ["rook_white","knight_white","bishop_white","queen_white","king_light","bishop_white","knight_white","rook_white","rook_black","knight_black","bishop_black","queen_black","king_black","bishop_black","knight_black","rook_black","pawn_white","pawn_black"]
 
 	for i in range(len(pieces)):
-		pieces[i] = load_pieces(f"{pieces[i]}", width, height, width//110, height//110)
+		pieces[i] = load_pieces(f"{pieces[i]}", width, height, width//140, height//140)
 
 	return ui_dark, ui_light, pieces
 
