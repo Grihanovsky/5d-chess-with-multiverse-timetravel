@@ -320,7 +320,7 @@ class Piece:
                             if board[y][x][0] != self.name[0]: # so that the king can take the pieces
 
                                 if self.name[0] == "W":
-                                    if board[y][x][8] != "1" and board[y][x][2] != "K": # if the piecce is unprotected, the move is added to the move_list
+                                    if x >=0 and y >= 0 and board[y][x][8] != "1" and board[y][x][2] != "K": # if the piecce is unprotected, the move is added to the move_list
                                         move_list.append(f"{y},{x}")
                                         board[y][x] = board[y][x][:6] + "1"+ board[y][x][7:]
 
@@ -353,7 +353,7 @@ class Piece:
             cell_part_2 = board[self.position[0]][self.position[1]][3:]
             #print(board[self.position[0]][self.position[1]])
             board[self.position[0]][self.position[1]] = "nnn" + cell_part_2
-            print("previous cell: ",board[self.position[0]][self.position[1]])
+            #print("previous cell: ",board[self.position[0]][self.position[1]])
             self.ever_moved = True
 
             self.Find_yourself(board)

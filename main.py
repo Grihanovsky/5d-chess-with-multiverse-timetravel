@@ -68,6 +68,7 @@ while running:
 					#print(f"Tried to move to {targeted_cells_rects[i]} with {Pieces[index_longterm].name}")
 					try:
 						board = logic.Piece.Move_n_Take(Pieces[index_longterm],(int(move_list[i][0]),int(move_list[i][2])),board,Pieces)
+						print(move_list)
 						turn += 1
 					except:
 						pass
