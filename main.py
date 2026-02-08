@@ -31,22 +31,37 @@ gear,gear_rect = ui_dark[0][1],ui_dark[1][1]
 Black_is_up = True
 Pieces = logic.Create_Pieces(Black_is_up)
 
+board = logic.Board_set_up(8,Black_is_up)
+board_rect = pygame.Rect(start_x, start_y,tile_size*8,tile_size*8)
+turn = 1
+players = ["W","B"]
+
 running = True
 while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
 		elif event.type == pygame.MOUSEBUTTONDOWN:
+
 			if bulb_rect.collidepoint(event.pos):
 				colours = colset_dark if colours == colset_light else colset_light
 				bulb = ui_dark[0][0] if bulb == ui_light[0][0] else ui_light[0][0]
 				gear = ui_dark[0][1] if gear == ui_light[0][1] else ui_light[0][1]
-			if gear_rect.collidepoint(event.pos):
+
+			elif gear_rect.collidepoint(event.pos):
 				if Black_is_up == True:
 					Black_is_up = False
 				else:
 					Black_is_up = True
 				Pieces = logic.Create_Pieces(Black_is_up)
+				board = logic.Board_set_up(8,Black_is_up)
+
+			elif board_rect.collidepoint(event.pos):
+				print("hit the board")
+				index = logic.find_a_piece_by_position(board, Pieces, start_x, start_y, event.pos, tile_size)
+				if index != None:
+					if players[turn % 2] == Pieces[index].name[0]:
+						print(f"selected: {Pieces[index].name}")
 
 
 	window.fill(colours[0])

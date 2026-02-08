@@ -93,7 +93,7 @@ def load_gui(width, height):
 	pieces = ["rook_white","knight_white","bishop_white","queen_white","king_light","bishop_white","knight_white","rook_white","rook_black","knight_black","bishop_black","queen_black","king_black","bishop_black","knight_black","rook_black","pawn_white","pawn_black"]
 
 	for i in range(len(pieces)):
-		pieces[i] = load_pieces(f"{pieces[i]}", width, height, width//140, height//140)
+		pieces[i] = load_pieces(f"{pieces[i]}", width, height, width//110, height//110)
 
 	return ui_dark, ui_light, pieces
 

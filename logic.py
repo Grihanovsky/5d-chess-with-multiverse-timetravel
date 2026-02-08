@@ -25,7 +25,7 @@
 #        BPA, BPB, BPC, BPD, BPE, BPF, BPG, BPH
 
 # board[i][j] = nnn-w-?-? = "Name-colour_of_the_cell-attacked_by_white-attacked_by_black"
-# nnn-w-0-1 means that the cell is NOT attacked by white, but is attacked by black
+# nnn---0-1 means that the cell is NOT attacked by white, but is attacked by black
 
 BLACK_UP = False
 
@@ -441,6 +441,9 @@ class King(Piece): # moves finished
 def Board_set_up(size,black_up): # finished
     List =  ["WRA", "WKB", "WBC", "WQQ", "WKK", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]
     List2 = ["BRA", "BKB", "BBC", "BQQ", "BKK", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
+    List3 =  ["WRA", "WKB", "WBC","WKK", "WQQ", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]    
+    List4 = ["BRA", "BKB", "BBC", "BKK", "BQQ", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
+
 
     board = [["0" for i in range(size)] for j in range(size)]
     counter = 1
@@ -452,57 +455,26 @@ def Board_set_up(size,black_up): # finished
             
                 if black_up:
                     if i == 0:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List2[j]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List2[j]}-b-?-?"
+                        board[i][j] = f"{List2[j]}---?-?"
                     elif i == 1:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List2[j+8]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List2[j+8]}-b-?-?"
+                        board[i][j] = f"{List2[j+8]}---?-?"
                     elif i == 6:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List[j+8]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List[j+8]}-b-?-?"
+                        board[i][j] = f"{List[j+8]}---?-?"
                     elif i == 7:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List[j]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List[j]}-b-?-?"
+                        board[i][j] = f"{List[j]}---?-?"
                     else:
-                        if counter % 2 == 1:
-                             board[i][j] = f"nnn-w-?-?"
-                        else:
-                            board[i][j] = f"nnn-b-?-?"
-                    
+                        board[i][j] = f"nnn---?-?"
                 else:
                     if i == 0:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List[j]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List[j]}-b-?-?"
+                        board[i][j] = f"{List3[j]}---?-?"
                     elif i == 1:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List[j+8]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List[j+8]}-b-?-?"
+                        board[i][j] = f"{List3[j+8]}---?-?"
                     elif i == 6:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List2[j+8]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List2[j+8]}-b-?-?"
+                        board[i][j] = f"{List4[j+8]}---?-?"
                     elif i == 7:
-                        if counter % 2 == 1:
-                            board[i][j] = f"{List2[j]}-w-?-?"
-                        else:
-                            board[i][j] = f"{List2[j]}-b-?-?"
+                        board[i][j] = f"{List4[j]}---?-?"
                     else:
-                        if counter % 2 == 1:
-                             board[i][j] = f"nnn-w-?-?"
-                        else:
-                            board[i][j] = f"nnn-b-?-?"
+                        board[i][j] = f"nnn---?-?"
                     
     return board
 
@@ -540,28 +512,18 @@ def Create_Pieces(black_is_up): # finished
         New_pieces_list.append(name)
     return New_pieces_list
 
+def find_a_piece_by_position(board, Pieces, start_x, start_y, coordinates, tile_size):
+    coordinates = coordinates[0]-start_x, coordinates[1]-start_y
+    cell_x = int(coordinates[0]/tile_size)
+    cell_y = int(coordinates[1]/tile_size)
 
-'''
-board = Board_set_up(8, True)
-Pieces = []
-Pieces = Create_Pieces()
+    counter = 0
+    while counter != len(Pieces):
+        if Pieces[counter].name == board[cell_y][cell_x][:3]:
+            return counter
+        counter += 1
 
-board = [['BRA-w-?-?', 'BKB-b-?-?', 'BBC-w-?-?', 'BQQ-b-?-?', 'BKK-w-?-?', 'BBF-b-?-?', 'BKG-w-?-?', 'BRH-b-?-?'],
-         ['BPA-b-?-?', 'BPB-w-?-?', 'BPC-b-?-?', 'BPD-w-?-?', 'BPE-b-?-?', 'BPF-w-?-?', 'BPG-b-?-?', 'BPH-w-?-?'],
-         ['nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?'],
-         ['nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?'],
-         ['nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?'],
-         ['nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?', 'nnn-b-?-?', 'nnn-w-?-?'],
-         ['WPA-w-?-?', 'WPB-b-?-?', 'WPC-w-?-?', 'WPD-b-?-?', 'WPE-w-?-?', 'WPF-b-?-?', 'WPG-w-?-?', 'WPH-b-?-?'],
-         ['WRA-b-?-?', 'WRH-w-?-?', 'WKB-b-?-?', 'WKG-w-?-?', 'WBC-b-?-?', 'WBF-w-?-?', 'WQQ-b-?-?', 'WKK-w-?-?']]
 
-WBC = Pawn(True, (6,4),"BKK")
-move_list,board = WBC.possible_moves(board)
-print(move_list)
-
-for i in range(len(board)):
-    print(board[i])
-'''
 
 # allow for multiple boards by turning the coords from the init into a list
 # to see whether the action is a take, compare the coordinates from the move_list with the coordinates of the board, and 
