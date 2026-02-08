@@ -95,8 +95,8 @@ class Piece:
                         move_list.append(f"{self.position[0]-1},{self.position[1]}")
                         move_list.append(f"{self.position[0]-2},{self.position[1]}")
                         try:
-                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:8] + '1'
+                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:8] + '1'
                         except:
                             pass
                     else:
@@ -344,30 +344,34 @@ class Piece:
             board = self.long_castling()
         else:
             # the taking infrastructure
-            Cell_content =  board[new_coords[0]][new_coords[1]][:2] # find what stood on the cell previously
-            board[new_coords[0]][new_coords[1]].replace(Cell_content, self.name) # put a new piece on the cell
-           
+            #cell_content = board[new_coords[0]][new_coords[1]][:3]
+            #if cell_content == "nnn":
+            #    pass
+            cell_part_1 = board[new_coords[0]][new_coords[1]][3:] # put a new piece on the cell 
+            #print(board[new_coords[0]][new_coords[1]][3:])
+            board[new_coords[0]][new_coords[1]] = self.name + cell_part_1    
+            cell_part_2 = board[self.position[0]][self.position[1]][3:]
+            #print(board[self.position[0]][self.position[1]])
+            board[self.position[0]][self.position[1]] = "nnn" + cell_part_2
+            print("previous cell: ",board[self.position[0]][self.position[1]])
             self.ever_moved = True
 
-            if Cell_content != "nnn":
-                for i in range(0,len(Pieces)):
-                    if Cell_content == Pieces[i].name: # find the piece that was taken in the pieces list
-                        Cell_content = Pieces[i]
-                    
-                self.Find_yourself(Cell_content, board) # put the pieces on new coords on the board
             self.Find_yourself(board)
-
-
         return board
+
     def Find_yourself(self,board): # not debugged
         # if you can't find yourself on the board, then you're off the board
-        old_coordinates = self.position
+        test_coordinates = [-1,-1]
+        breaking = False
         for i in range(0,len(board),1):
             for j in range(0,len(board),1):
                 if board[i][j][:3] == self.name:
                     self.position = (i,j)
-
-        if old_coordinates == self.position:
+                    test_coordinates = (i,j)
+                    breaking = True
+            if breaking:
+                break
+        if test_coordinates != self.position:
             self.on_board = False
             self.position = None
     
@@ -452,8 +456,8 @@ class King(Piece): # moves finished
 def Board_set_up(size,black_up): # finished
     List =  ["WRA", "WKB", "WBC", "WQQ", "WKK", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]
     List2 = ["BRA", "BKB", "BBC", "BQQ", "BKK", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
-    List3 =  ["WRH", "WKG", "WBF","WKK", "WQQ", "WBC", "WKB", "WRA", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]    
-    List4 = ["BRH", "BKG", "BBF", "BKK", "BQQ", "BBC", "BKB", "BRA", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
+    List3 =  ["WRA", "WKB", "WBC","WKK", "WQQ", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]    
+    List4 = ["BRA", "BKB", "BBC", "BKK", "BQQ", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
 
 
     board = [["0" for i in range(size)] for j in range(size)]
