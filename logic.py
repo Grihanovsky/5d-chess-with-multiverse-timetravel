@@ -27,7 +27,6 @@
 # board[i][j] = nnn-w-?-? = "Name-colour_of_the_cell-attacked_by_white-attacked_by_black"
 # nnn---0-1 means that the cell is NOT attacked by white, but is attacked by black
 
-BLACK_UP = False
 
 class Piece:
     def __init__(self,on_board,position,name):
@@ -36,62 +35,77 @@ class Piece:
         self.ever_moved = False
         self.name = name
 
-    def possible_moves_pawn(self,board): # works, but no en passant
+    def possible_moves_pawn(self,board,BLACK_UP): # works, but no en passant
 
         if self.on_board:
             move_list = []
             if BLACK_UP:
-                print(self.name[0])
                 if self.name[0] == "W":
                     if self.position[0] == 6:
                         move_list.append(f"{self.position[0]-1},{self.position[1]}") # does not work, there is not such thing as self.colour
                         move_list.append(f"{self.position[0]-2},{self.position[1]}")
-                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
-                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
-
+                        try: 
+                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
+                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
+                        except:
+                            pass
                     else:
                         move_list.append(f"{self.position[0]-1},{self.position[1]}") 
-                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
-                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
-
+                        try:
+                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
+                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
+                        except:
+                            pass
                 else:
                     if self.position[0] == 1:
                         move_list.append(f"{self.position[0]+1},{self.position[1]}")
                         move_list.append(f"{self.position[0]+2},{self.position[1]}")
-                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
-
+                        try:
+                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                        except:
+                            pass
                     else:
                         move_list.append(f"{self.position[0]+1},{self.position[1]}")
-                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
-
+                        try:
+                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                        except:
+                            pass
             else:
                 if self.name[0] == "W":
                     if self.position[0] == 1:
                         move_list.append(f"{self.position[0]+1},{self.position[1]}")
                         move_list.append(f"{self.position[0]+2},{self.position[1]}")
-                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
-                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
-
+                        try:
+                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
+                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
+                        except:
+                            pass
                     else:
                         move_list.append(f"{self.position[0]+1},{self.position[1]}") 
-                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
-                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
-
+                        try:
+                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
+                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
+                        except:
+                            pass
 
                 else:
                     if self.position[0] == 6:
                         move_list.append(f"{self.position[0]-1},{self.position[1]}")
                         move_list.append(f"{self.position[0]-2},{self.position[1]}")
-                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
-
+                        try:
+                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                        except:
+                            pass
                     else:
                         move_list.append(f"{self.position[0]-1},{self.position[1]}")
-                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
-
+                        try:
+                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                        except:
+                            pass
             # an if condition for taking the pieces on the diagonal tiles.
 
             return move_list,board
@@ -227,7 +241,6 @@ class Piece:
 
             for dl in range(self.position[0],8):
                 try:
-                    print(fallback_x-(dl-fallback_y))
                     if fallback_x-(dl-fallback_y) >= 0:
 
                         if (dl,fallback_x-(dl-fallback_y)) != self.position and board[dl][fallback_x-(dl-fallback_y)][2] != "K":
@@ -360,22 +373,20 @@ class Piece:
     
 
 class Pawn(Piece): # moves finished, need to solve the promoted issue
-
-    def possible_moves(self,board):
-        return self.possible_moves_pawn(board) # returns only the move_list
+    def possible_moves(self,board,Black_up):
+        return self.possible_moves_pawn(board,Black_up) # returns only the move_list
 class Rook(Piece): # moves finished
-
-    def possible_moves(self,board):
+    def possible_moves(self,board,Black_up):
         return self.possible_moves_rook(board)# returns the move_list and the board
 class Knight(Piece): # moves finished
     
-    def possible_moves(self,board):
+    def possible_moves(self,board,Black_up):
         return self.possible_moves_knight(board) # returns both the board and the move_list
 class Bishop(Piece): # moves finished
-    def possible_moves(self, board):
+    def possible_moves(self, board,Black_up):
         return self.possible_moves_bishop(board) # returns the board too
 class Queen(Piece): # moves finished
-    def possible_moves(self,board):
+    def possible_moves(self,board,Black_up):
         move_list1, b = self.possible_moves_bishop(board)
         move_list2, b = self.possible_moves_rook(board)
 
@@ -385,9 +396,9 @@ class Queen(Piece): # moves finished
             actual_move_list.append(move_list1[i])
         for i in range(len(move_list2)):
             actual_move_list.append(move_list2[i])
-        return actual_move_list
+        return actual_move_list, b
 class King(Piece): # moves finished
-    def possible_moves(self,board):
+    def possible_moves(self,board,Black_up):
         return self.possible_moves_king(board)
     def short_castling(self,new_coords, board): # not debugged
         if new_coords == (7,6):
@@ -441,8 +452,8 @@ class King(Piece): # moves finished
 def Board_set_up(size,black_up): # finished
     List =  ["WRA", "WKB", "WBC", "WQQ", "WKK", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]
     List2 = ["BRA", "BKB", "BBC", "BQQ", "BKK", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
-    List3 =  ["WRA", "WKB", "WBC","WKK", "WQQ", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]    
-    List4 = ["BRA", "BKB", "BBC", "BKK", "BQQ", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
+    List3 =  ["WRH", "WKG", "WBF","WKK", "WQQ", "WBC", "WKB", "WRA", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]    
+    List4 = ["BRH", "BKG", "BBF", "BKK", "BQQ", "BBC", "BKB", "BRA", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
 
 
     board = [["0" for i in range(size)] for j in range(size)]
@@ -482,9 +493,9 @@ def Create_Pieces(black_is_up): # finished
     Pieces_list = ["WRA","WKB","WBC","WQQ","WKK","WBF","WKG","WRH","BRA","BKB","BBC","BQQ","BKK","BBF","BKG","BRH","WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"] 
     New_pieces_list = []
     if black_is_up:
-        Dictionary = {"WW":7,"BW":1,"A":0,"B":1,"C":2,"D":3,"E":4,'F':5,'G':6,'H':7,"Q":3,"K":4}
+        Dictionary = {"WW":7,"BW":0,"A":0,"B":1,"C":2,"D":3,"E":4,'F':5,'G':6,'H':7,"Q":3,"K":4}
     else:
-        Dictionary = {"WW":0,"BW":8,"A":7,"B":6,"C":5,"D":4,"E":3,'F':2,'G':1,'H':0,"Q":4,"K":3}
+        Dictionary = {"WW":0,"BW":7,"A":0,"B":1,"C":2,"D":3,"E":4,'F':5,'G':6,'H':7,"Q":4,"K":3}
 
     for i in range(len(Pieces_list)):
         name = Pieces_list[i]
@@ -499,16 +510,19 @@ def Create_Pieces(black_is_up): # finished
         elif Pieces_list[i][1] == "Q":
             name = Queen(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
         elif Pieces_list[i][1] == "P":
-            
-            
-            if black_is_up == False and Pieces_list[i][0] == "B": # It needs to be this way, trust me
-                name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]-2,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
-            elif black_is_up == False and Pieces_list[i][0] == "W":
-                name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]+2,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+            #name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+            if black_is_up:
+                if Pieces_list[i][0] == "B": # It needs to be this way, trust me
+                    name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]+1,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+                elif Pieces_list[i][0] == "W":
+                    name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]-1,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
             else:
-                name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"],Dictionary[Pieces_list[i][2]]),Pieces_list[i])
-        
-        
+                if Pieces_list[i][0] == "B":
+                    name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]-1,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+                elif Pieces_list[i][0] == "W":
+                    name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]+1,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
+            
+            
         New_pieces_list.append(name)
     return New_pieces_list
 
@@ -523,7 +537,9 @@ def find_a_piece_by_position(board, Pieces, start_x, start_y, coordinates, tile_
             return counter
         counter += 1
 
-
+def find_possible_moves(Piece,board,BLACK_UP):
+    return Piece.possible_moves(board,BLACK_UP)
+     
 
 # allow for multiple boards by turning the coords from the init into a list
 # to see whether the action is a take, compare the coordinates from the move_list with the coordinates of the board, and 

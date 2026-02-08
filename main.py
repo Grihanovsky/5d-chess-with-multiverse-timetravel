@@ -36,6 +36,8 @@ board_rect = pygame.Rect(start_x, start_y,tile_size*8,tile_size*8)
 turn = 1
 players = ["W","B"]
 
+printing_possible_moves = False
+
 running = True
 while running:
 	for event in pygame.event.get():
@@ -61,8 +63,10 @@ while running:
 				index = logic.find_a_piece_by_position(board, Pieces, start_x, start_y, event.pos, tile_size)
 				if index != None:
 					if players[turn % 2] == Pieces[index].name[0]:
-						print(f"selected: {Pieces[index].name}")
-
+						print(Pieces[index].name)
+						print(Pieces[index].position)
+						move_list,board = logic.find_possible_moves(Pieces[index],board,Black_is_up)
+						printing_possible_moves = True
 
 	window.fill(colours[0])
 
@@ -70,11 +74,15 @@ while running:
 
 	for i in range(len(Pieces)):
 		if i >= 16 and i <= 23:
-			new_graphics.draw_pieces(window,pieces_texture[16],Pieces[i],start_x,start_y,tile_size)
+			new_graphics.draw_pieces(window,pieces_texture[16],Pieces[i],start_x,start_y,tile_size,Black_is_up)
 		elif i > 23:
-			new_graphics.draw_pieces(window,pieces_texture[17],Pieces[i],start_x,start_y,tile_size)
+			new_graphics.draw_pieces(window,pieces_texture[17],Pieces[i],start_x,start_y,tile_size,Black_is_up)
 		else:
-			new_graphics.draw_pieces(window,pieces_texture[i],Pieces[i],start_x,start_y,tile_size)
+			new_graphics.draw_pieces(window,pieces_texture[i],Pieces[i],start_x,start_y,tile_size,Black_is_up)
+
+	if printing_possible_moves:
+		for i in range(len(move_list)):
+			new_graphics.draw_possible_moves(window, tile_size, start_x, start_y, move_list[i],colours[5])
 
 
 	#pygame.draw.rect(window, colours[5], bulb_rect) was here for debugging

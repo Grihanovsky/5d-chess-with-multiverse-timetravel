@@ -62,23 +62,38 @@ def draw_theme_switch(window,switch, x,y):
 def draw_settings_button(window,gear, x,y):
     window.blit(gear, (x,y))
 
-def draw_pieces(window,piece_texture,piece, x,y,tile_size):
+def draw_pieces(window,piece_texture,piece, x,y,tile_size,black_is_up):
 	if piece.on_board:
-		if piece.name[1] == "P":
-			if piece.name[0] == "W":
-				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0]-1)))
-			else:
-				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+		if black_is_up:
+			if piece.name[1] == "P":
+				if piece.name[0] == "W":
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+				else:
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
 
+			else:
+				if piece.name[0] == "W":
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+				else:
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+		
+		
 		else:
-			if piece.name[0] == "W":
-				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+			if piece.name[1] == "P":
+				if piece.name[0] == "W":
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+				else:
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+
 			else:
-				window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0]-1)))
+				if piece.name[0] == "W":
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
+				else:
+					window.blit(piece_texture, (x+(tile_size//6)+tile_size*piece.position[1],y+(tile_size//7)+tile_size*(piece.position[0])))
 
+def draw_possible_moves(window, tile_size, start_x, start_y, cell_attacked,colour):
+	pygame.draw.circle(window, colour, (start_x + tile_size*int(cell_attacked[2])+tile_size//2, start_y + tile_size*int(cell_attacked[0])+tile_size//2), tile_size//4)
 
-def draw_possible_moves():
-    pass
 
 def load_gui(width, height):
 	ui_dark = [["bulb_dark","gear_dark"],["bulb_dark_rect","gear_dark_rect"]]
