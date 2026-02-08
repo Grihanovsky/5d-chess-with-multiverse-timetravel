@@ -28,7 +28,7 @@ font = pygame.font.Font(None, tile_size//4)
 bulb,bulb_rect = ui_dark[0][0],ui_dark[1][0]
 gear,gear_rect = ui_dark[0][1],ui_dark[1][1]
 
-Black_is_up = False
+Black_is_up = True
 Pieces = logic.Create_Pieces(Black_is_up)
 
 board = logic.Board_set_up(8,Black_is_up)

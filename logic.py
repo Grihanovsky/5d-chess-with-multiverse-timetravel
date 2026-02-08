@@ -334,7 +334,7 @@ class Piece:
                                         board[y][x] = board[y][x][:6] + "1"+ board[y][x][7:]
 
                                 else:
-                                    if board[y][x][6] != "1" and board[y][x][2] != "K":
+                                    if x>= 0 and y >= 0 and board[y][x][6] != "1" and board[y][x][2] != "K":
                                         move_list.append(f"{y},{x}")
                                         board[y][x] = board[y][x][:8] + "1"
                         except:
