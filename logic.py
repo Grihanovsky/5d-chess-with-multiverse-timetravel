@@ -35,80 +35,89 @@ class Piece:
         self.ever_moved = False
         self.name = name
 
-    def possible_moves_pawn(self,board,BLACK_UP): # works, but no en passant
+    def possible_moves_pawn(self,board,BLACK_UP): # works, but no promotion and no en passant
 
-        if self.on_board:
+        if self.on_board: 
             move_list = []
-            if BLACK_UP:
-                if self.name[0] == "W":
-                    if self.position[0] == 6:
-                        move_list.append(f"{self.position[0]-1},{self.position[1]}") # does not work, there is not such thing as self.colour
-                        move_list.append(f"{self.position[0]-2},{self.position[1]}")
-                        try: 
-                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
-                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
-                        except:
-                            pass
-                    else:
-                        move_list.append(f"{self.position[0]-1},{self.position[1]}") 
-                        try:
-                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
-                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
-                        except:
-                            pass
-                else:
-                    if self.position[0] == 1:
-                        move_list.append(f"{self.position[0]+1},{self.position[1]}")
-                        move_list.append(f"{self.position[0]+2},{self.position[1]}")
-                        try:
-                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
-                        except:
-                            pass
-                    else:
-                        move_list.append(f"{self.position[0]+1},{self.position[1]}")
-                        try:
-                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
-                        except:
-                            pass
-            else:
-                if self.name[0] == "W":
-                    if self.position[0] == 1:
-                        move_list.append(f"{self.position[0]+1},{self.position[1]}")
-                        move_list.append(f"{self.position[0]+2},{self.position[1]}")
-                        try:
-                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
-                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
-                        except:
-                            pass
-                    else:
-                        move_list.append(f"{self.position[0]+1},{self.position[1]}") 
-                        try:
-                            board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
-                            board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
-                        except:
-                            pass
+            if (BLACK_UP and self.name[0] == "W") or (BLACK_UP == False and self.name[0] =="B"):
+                if self.ever_moved == False and board[self.position[0]-2][self.position[1]][:3] == "nnn":
+                    move_list.append((f"{self.position[0]-2},{self.position[1]}"))                    
+                if board[self.position[0]-1][self.position[1]][:3] == "nnn":
+                    move_list.append((f"{self.position[0]-1},{self.position[1]}")) # moving
 
+                try:
+                    if board[self.position[0]-1][self.position[1]-1][0] != self.name[0] and board[self.position[0]-1][self.position[1]-1][0] != "n":
+                        move_list.append((f"{self.position[0]-1},{self.position[1]-1}"))
+                except:
+                        pass
+                try:
+                    if board[self.position[0]-1][self.position[1]+1][0] != self.name[0] and board[self.position[0]-1][self.position[1]+1][0] != "n":
+                        move_list.append((f"{self.position[0]-1},{self.position[1]+1}"))
+                except:
+                        pass
+                
+                if self.name[0] == "W":
+                    try:
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
+                    except:
+                        pass
+                    try:
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
+                    except:
+                        pass
                 else:
-                    if self.position[0] == 6:
-                        move_list.append(f"{self.position[0]-1},{self.position[1]}")
-                        move_list.append(f"{self.position[0]-2},{self.position[1]}")
-                        try:
-                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:8] + '1'
-                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:8] + '1'
-                        except:
-                            pass
-                    else:
-                        move_list.append(f"{self.position[0]-1},{self.position[1]}")
-                        try:
-                            board[self.position[0]-1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
-                            board[self.position[0]-1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
-                        except:
-                            pass
-            # an if condition for taking the pieces on the diagonal tiles.
+                    try:
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:8] + '1'
+                    except:
+                        pass
+                    try:
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:8] + '1'
+                    except:
+                        pass
 
-            return move_list,board
+
+            elif (BLACK_UP and self.name[0] == "B") or (BLACK_UP == False and self.name[0] =="W"):
+                if self.ever_moved == False and board[self.position[0]+2][self.position[1]][:3] == "nnn":
+                    move_list.append((f"{self.position[0]+2},{self.position[1]}"))
+                if board[self.position[0]+1][self.position[1]][:3] == "nnn":
+                    move_list.append((f"{self.position[0]+1},{self.position[1]}"))
+
+
+
+                try:
+                    if board[self.position[0]+1][self.position[1]-1][0] != self.name[0] and board[self.position[0]+1][self.position[1]-1][0] != "n":
+                        move_list.append((f"{self.position[0]+1},{self.position[1]-1}"))
+                except:
+                        pass
+                try:
+                    if board[self.position[0]+1][self.position[1]+1][0] != self.name[0] and board[self.position[0]+1][self.position[1]+1][0] != "n":
+                        move_list.append((f"{self.position[0]+1},{self.position[1]+1}"))
+                except:
+                        pass
+                
+                if self.name[0] == "W":
+                    try:
+                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
+                    except:
+                       pass
+                    try:
+                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:6] + '1' + board[self.position[0]+1][self.position[1]-1][7:]
+                    except:
+                        pass
+                else:                    
+                    try:
+                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                    except:
+                       pass
+                    try:
+                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                    except:
+                        pass
+
+
+        return move_list,board
+
+
     def possible_moves_rook(self,board): # works completely
         if self.on_board:
             move_list = []

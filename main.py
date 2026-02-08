@@ -68,7 +68,7 @@ while running:
 					#print(f"Tried to move to {targeted_cells_rects[i]} with {Pieces[index_longterm].name}")
 					try:
 						board = logic.Piece.Move_n_Take(Pieces[index_longterm],(int(move_list[i][0]),int(move_list[i][2])),board,Pieces)
-						print(move_list)
+						#print(move_list)
 						turn += 1
 					except:
 						pass
@@ -104,9 +104,10 @@ while running:
 
 	new_graphics.draw_board(window,tile_size,start_x,start_y,colours,font,Black_is_up)
 
-	#if turn == 4:
-		#for i in range(len(board)):
-			#print(board[i])
+	if turn == 4:
+		for i in range(len(board)):
+			print(board[i])
+		turn += 2
 
 	for i in range(len(Pieces)):
 
