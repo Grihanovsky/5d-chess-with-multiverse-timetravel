@@ -104,10 +104,10 @@ while running:
 
 	new_graphics.draw_board(window,tile_size,start_x,start_y,colours,font,Black_is_up)
 
-	if turn == 4:
-		for i in range(len(board)):
-			print(board[i])
-		turn += 2
+	#if turn == 4:
+	#	for i in range(len(board)):
+	#		print(board[i])
+	#	turn += 2
 
 	for i in range(len(Pieces)):
 
