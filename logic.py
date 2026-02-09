@@ -40,7 +40,7 @@ class Piece:
         if self.on_board: 
             move_list = []
             if (BLACK_UP and self.name[0] == "W") or (BLACK_UP == False and self.name[0] =="B"):
-                if self.ever_moved == False and board[self.position[0]-2][self.position[1]][:3] == "nnn":
+                if self.ever_moved == False and board[self.position[0]-1][self.position[1]][:3] == "nnn" and board[self.position[0]-2][self.position[1]][:3] == "nnn":
                     move_list.append((f"{self.position[0]-2},{self.position[1]}"))                    
                 if board[self.position[0]-1][self.position[1]][:3] == "nnn":
                     move_list.append((f"{self.position[0]-1},{self.position[1]}")) # moving
@@ -77,7 +77,7 @@ class Piece:
 
 
             elif (BLACK_UP and self.name[0] == "B") or (BLACK_UP == False and self.name[0] =="W"):
-                if self.ever_moved == False and board[self.position[0]+2][self.position[1]][:3] == "nnn":
+                if self.ever_moved == False and board[self.position[0]+1][self.position[1]][:3] == "nnn" and board[self.position[0]+2][self.position[1]][:3] == "nnn":
                     move_list.append((f"{self.position[0]+2},{self.position[1]}"))
                 if board[self.position[0]+1][self.position[1]][:3] == "nnn":
                     move_list.append((f"{self.position[0]+1},{self.position[1]}"))
