@@ -70,6 +70,18 @@ while running:
 						board = logic.Piece.Move_n_Take(Pieces[index_longterm],(int(move_list[i][0]),int(move_list[i][2])),board,Pieces)
 						#print(move_list)
 						turn += 1
+
+						for i in range(len(board)):
+							for j in range(len(board[0])):
+								board[i][j] = board[i][j][:3] + "---?-?"
+
+						for i in range(len(Pieces)):
+							# print(Pieces[i].name[1])
+								# print('got here')
+							# if Pieces[i].name[1] == "K" and Pieces[i].name[1] == "K" or Pieces:
+								move_list,board = logic.find_possible_moves(Pieces[i],board,Black_is_up)
+
+
 					except:
 						pass
 					move_list = []
@@ -104,14 +116,19 @@ while running:
 
 	new_graphics.draw_board(window,tile_size,start_x,start_y,colours,font,Black_is_up)
 
-	#if turn == 4:
-	#	for i in range(len(board)):
-	#		print(board[i])
-	#	turn += 2
+	if turn == 4:
+		for i in range(len(board)):
+			print(board[i])
+		turn += 2
+
+
 
 	for i in range(len(Pieces)):
 
 		logic.Piece.Find_yourself(Pieces[i],board)
+
+
+
 
 		if i >= 16 and i <= 23:  # draw stuff
 			new_graphics.draw_pieces(window,pieces_texture[16],Pieces[i],start_x,start_y,tile_size,Black_is_up)

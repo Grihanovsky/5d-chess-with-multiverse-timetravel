@@ -13,7 +13,7 @@ import pygame
 #    | 
 #  fixed
 #
-# need to find a way to unflag the cells
+# need to find a way to unflag the cells --- fixed
 
 # dictionary
 # rooks: WRA, WRH, BRA, BRH
@@ -56,26 +56,6 @@ class Piece:
                 except:
                         pass
                 
-                if self.name[0] == "W":
-                    try:
-                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
-                    except:
-                        pass
-                    try:
-                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
-                    except:
-                        pass
-                else:
-                    try:
-                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:8] + '1'
-                    except:
-                        pass
-                    try:
-                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:8] + '1'
-                    except:
-                        pass
-
-
             elif (BLACK_UP and self.name[0] == "B") or (BLACK_UP == False and self.name[0] =="W"):
                 if self.ever_moved == False and board[self.position[0]+1][self.position[1]][:3] == "nnn" and board[self.position[0]+2][self.position[1]][:3] == "nnn":
                     move_list.append((f"{self.position[0]+2},{self.position[1]}"))
@@ -94,7 +74,33 @@ class Piece:
                         move_list.append((f"{self.position[0]+1},{self.position[1]+1}"))
                 except:
                         pass
+        board = self.flags_for_pawn(board, BLACK_UP)
                 
+                
+        return move_list,board
+    def flags_for_pawn(self,board, BLACK_UP):
+        if self.on_board:
+            if BLACK_UP:
+                if self.name[0] == "W":
+                    try:          # need to fix all the try excepts, this is way too slow
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:6] + '1' + board[self.position[0]-1][self.position[1]+1][7:]
+                    except:
+                        pass
+                    try:
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:6] + '1' + board[self.position[0]-1][self.position[1]-1][7:]
+                    except:
+                        pass
+                else:
+                    try:
+                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                    except:
+                        pass
+                    try:
+                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                    except:
+                        pass
+
+            else:
                 if self.name[0] == "W":
                     try:
                         board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:6] + '1' + board[self.position[0]+1][self.position[1]+1][7:]
@@ -106,27 +112,25 @@ class Piece:
                         pass
                 else:                    
                     try:
-                        board[self.position[0]+1][self.position[1]+1] = board[self.position[0]+1][self.position[1]+1][:8] + '1'
+                        board[self.position[0]-1][self.position[1]+1] = board[self.position[0]-1][self.position[1]+1][:8] + '1'
                     except:
                        pass
                     try:
-                        board[self.position[0]+1][self.position[1]-1] = board[self.position[0]+1][self.position[1]-1][:8] + '1'
+                        board[self.position[0]-1][self.position[1]-1] = board[self.position[0]-1][self.position[1]-1][:8] + '1'
                     except:
                         pass
+        return board
 
 
-        return move_list,board
-
-
+        
     def possible_moves_rook(self,board): # works completely
         if self.on_board:
             move_list = []
 
             for u in range(self.position[0], 8):
                 if (u,self.position[1]) != self.position:
-                    if board[u][self.position[1]][2] == "K":
-                        break
-                    if board[u][self.position[1]][0] != self.name[0]:    
+
+                    if board[u][self.position[1]][0] != self.name[0] and board[u][self.position[1]][2] != "K":    
                         move_list.append(f"{u},{self.position[1]}")
 
                     if self.name[0] == 'W':
@@ -142,11 +146,10 @@ class Piece:
             for d in range(self.position[0]-1,-1,-1):
                 
                 if (d,self.position[1]) != self.position: 
-                    if board[d][self.position[1]][2] == "K":
-                        break
-                    if board[d][self.position[1]][0] != self.name[0]:
+
+                    if board[d][self.position[1]][0] != self.name[0] and board[d][self.position[1]][2] != "K":
                         move_list.append(f"{d},{self.position[1]}")
-                
+
                     if self.name[0] == "W":
                         board[d][self.position[1]] = board[d][self.position[1]][:6] + '1' + board[d][self.position[1]][7:]
                     else:
@@ -160,15 +163,16 @@ class Piece:
             for r in range(self.position[1], 8,1):
                 
                 if (self.position[0],r) != self.position:
-                    if board[self.position[0]][r][2] == "K":
-                        break
-                    if board[self.position[0]][r][0] != self.name[0]:
+
+                    if board[self.position[0]][r][0] != self.name[0] and board[self.position[0]][r][2] != "K":
                         move_list.append(f"{self.position[0]},{r}")
-                
+ 
                     if self.name[0] == "W":
                         board[self.position[0]][r] = board[self.position[0]][r][:6] + '1' + board[self.position[0]][r][7:]
                     else: 
                         board[self.position[0]][r] = board[self.position[0]][r][:8] + '1'
+
+
 
                     if board[self.position[0]][r][0] != "n":
                         break
@@ -177,21 +181,22 @@ class Piece:
             for l in range(self.position[1],-1,-1):
                     
                 if (self.position[0],l) != self.position: 
-                    if board[self.position[0]][l][2] == "K":
-                        break
-                    if board[self.position[0]][l][0] != self.name[0]:
+                    if board[self.position[0]][l][0] != self.name[0] and board[self.position[0]][l][2] != "K":
                         move_list.append(f"{self.position[0]},{l}")
-                    
-                    if self.name == "W":
+
+                    if self.name[0] == "W":
                         board[self.position[0]][l] = board[self.position[0]][l][:6] + '1' + board[self.position[0]][l][7:]
                     else:
                         board[self.position[0]][l] = board[self.position[0]][l][:8] + "1"
                     
+
                     if board[self.position[0]][l][0] != "n":
                         break
 
             # returns the move_list with all the possible cells to move
             return move_list,board
+
+    
     def possible_moves_knight(self,board): # works completely
         move_list = []
         potential_move_list = [f"{self.position[0]-1},{self.position[1]+2}",
@@ -205,12 +210,12 @@ class Piece:
         for i in range(len(potential_move_list)):
             try:
                 if board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][2] != "K":
-                
                     if self.name[0] == "W":
                         board[int(potential_move_list[i][0])][int(potential_move_list[i][2])] = board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][:6] + '1' + board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][7:]
                     else:
                         board[int(potential_move_list[i][0])][int(potential_move_list[i][2])] = board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][:8] + '1'
 
+            
                     if board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][0] != self.name[0]:
                         move_list.append(potential_move_list[i])
             except:
@@ -219,6 +224,8 @@ class Piece:
         
 
         return move_list, board    
+
+    
     def possible_moves_bishop(self,board): # works completely
         if self.on_board:
             move_list = []
@@ -317,6 +324,10 @@ class Piece:
                     
 
             return move_list,board
+    
+    
+    
+    
     def possible_moves_king(self, board): # momves and takes with caution, no castling though
         if self.on_board:
             move_list = []
@@ -337,6 +348,14 @@ class Piece:
                                     if x>= 0 and y >= 0 and board[y][x][6] != "1" and board[y][x][2] != "K":
                                         move_list.append(f"{y},{x}")
                                         board[y][x] = board[y][x][:8] + "1"
+                            else:
+                                if self.name[0] == "W":
+                                    if x >=0 and y >= 0 and board[y][x][8] != "1" and board[y][x][2] != "K": # if the piecce is unprotected, the move is added to the move_list
+                                        board[y][x] = board[y][x][:6] + "1"+ board[y][x][7:]
+                                else:
+                                    if x>= 0 and y >= 0 and board[y][x][6] != "1" and board[y][x][2] != "K":
+                                        board[y][x] = board[y][x][:8] + "1"
+
                         except:
                             pass
 
@@ -344,6 +363,8 @@ class Piece:
                             
             return move_list, board
         
+
+
 
     def Move_n_Take(self,new_coords,board,Pieces): # not debugged
 
@@ -552,7 +573,6 @@ def find_a_piece_by_position(board, Pieces, start_x, start_y, coordinates, tile_
 
 def find_possible_moves(Piece,board,BLACK_UP):
     return Piece.possible_moves(board,BLACK_UP)
-     
 def find_recs_for_possible_moves(move_list,start_x, start_y,tile_size):
     List_of_rects = []
     for i in range(len(move_list)):
