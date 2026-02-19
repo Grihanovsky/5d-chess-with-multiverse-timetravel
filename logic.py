@@ -36,9 +36,9 @@ class Piece:
         self.name = name
 
     def possible_moves_pawn(self,board,BLACK_UP): # works, but no promotion and no en passant
+        move_list = []
 
         if self.on_board: 
-            move_list = []
             if (BLACK_UP and self.name[0] == "W") or (BLACK_UP == False and self.name[0] =="B"):
                 if self.ever_moved == False and board[self.position[0]-1][self.position[1]][:3] == "nnn" and board[self.position[0]-2][self.position[1]][:3] == "nnn":
                     move_list.append((f"{self.position[0]-2},{self.position[1]}"))                    
@@ -194,38 +194,35 @@ class Piece:
                         break
 
             # returns the move_list with all the possible cells to move
-            return move_list,board
-
-    
+        return move_list,board
     def possible_moves_knight(self,board): # works completely
         move_list = []
-        potential_move_list = [f"{self.position[0]-1},{self.position[1]+2}",
-                               f"{self.position[0]+1},{self.position[1]+2}",
-                               f"{self.position[0]-1},{self.position[1]-2}",
-                               f"{self.position[0]+1},{self.position[1]-2}",
-                               f"{self.position[0]+2},{self.position[1]+1}",
-                               f"{self.position[0]+2},{self.position[1]-1}",
-                               f"{self.position[0]-2},{self.position[1]+1}",
-                               f"{self.position[0]-2},{self.position[1]-1}"]
-        for i in range(len(potential_move_list)):
-            try:
-                if board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][2] != "K":
-                    if self.name[0] == "W":
-                        board[int(potential_move_list[i][0])][int(potential_move_list[i][2])] = board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][:6] + '1' + board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][7:]
-                    else:
-                        board[int(potential_move_list[i][0])][int(potential_move_list[i][2])] = board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][:8] + '1'
+        if self.on_board:
+            potential_move_list = [f"{self.position[0]-1},{self.position[1]+2}",
+                                f"{self.position[0]+1},{self.position[1]+2}",
+                                f"{self.position[0]-1},{self.position[1]-2}",
+                                f"{self.position[0]+1},{self.position[1]-2}",
+                                f"{self.position[0]+2},{self.position[1]+1}",
+                                f"{self.position[0]+2},{self.position[1]-1}",
+                                f"{self.position[0]-2},{self.position[1]+1}",
+                                f"{self.position[0]-2},{self.position[1]-1}"]
+            for i in range(len(potential_move_list)):
+                try:
+                    if board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][2] != "K":
+                        if self.name[0] == "W":
+                            board[int(potential_move_list[i][0])][int(potential_move_list[i][2])] = board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][:6] + '1' + board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][7:]
+                        else:
+                            board[int(potential_move_list[i][0])][int(potential_move_list[i][2])] = board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][:8] + '1'
 
-            
-                    if board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][0] != self.name[0]:
-                        move_list.append(potential_move_list[i])
-            except:
-                pass
+                
+                        if board[int(potential_move_list[i][0])][int(potential_move_list[i][2])][0] != self.name[0]:
+                            move_list.append(potential_move_list[i])
+                except:
+                    pass
 
         
 
         return move_list, board    
-
-    
     def possible_moves_bishop(self,board): # works completely
         if self.on_board:
             move_list = []
@@ -236,8 +233,8 @@ class Piece:
                 try:
                     if fallback_x+(dr-fallback_y) >= 0:
 
-                        if(dr,fallback_x+(dr-fallback_y)) != self.position and board[dr][fallback_x+(dr-fallback_y)][2] != "K":
-                            if board[dr][fallback_x+(dr-fallback_y)][0] != self.name[0]:
+                        if(dr,fallback_x+(dr-fallback_y)) != self.position :
+                            if board[dr][fallback_x+(dr-fallback_y)][0] != self.name[0] and board[dr][fallback_x+(dr-fallback_y)][2] != "K":
                                 move_list.append(f"{dr},{fallback_x+(dr-fallback_y)}")
 
 
@@ -259,9 +256,9 @@ class Piece:
                 try:
                     if fallback_x-(dl-fallback_y) >= 0:
 
-                        if (dl,fallback_x-(dl-fallback_y)) != self.position and board[dl][fallback_x-(dl-fallback_y)][2] != "K":
+                        if (dl,fallback_x-(dl-fallback_y)) != self.position:
 
-                            if board[dl][fallback_x-(dl-fallback_y)][0] != self.name[0]:
+                            if board[dl][fallback_x-(dl-fallback_y)][0] != self.name[0] and board[dl][fallback_x-(dl-fallback_y)][2] != "K":
                                 move_list.append(f"{dl},{fallback_x-(dl-fallback_y)}")
 
 
@@ -281,10 +278,10 @@ class Piece:
             for ur in range(self.position[0],-1,-1):
                 try:
                     if fallback_x+(ur-fallback_y) >= 0:
-                        if (ur,fallback_x+(ur-fallback_y)) != self.position and board[ur][fallback_x+(ur-fallback_y)][2] != "K":
+                        if (ur,fallback_x+(ur-fallback_y)) != self.position:
 
 
-                            if board[ur][fallback_x+(ur-fallback_y)][0] != self.name[0]:
+                            if board[ur][fallback_x+(ur-fallback_y)][0] != self.name[0] and board[ur][fallback_x+(ur-fallback_y)][2] != "K":
                                 move_list.append(f"{ur},{fallback_x+(ur-fallback_y)}")
 
 
@@ -302,11 +299,11 @@ class Piece:
             for ul in range(self.position[0],-1,-1):
                 try:
                     if fallback_x-(ul-fallback_y) >= 0:
-                        if (ul,fallback_x-(ul-fallback_y)) != self.position and board[ul][fallback_x-(ul-fallback_y)][2] != "K":
+                        if (ul,fallback_x-(ul-fallback_y)) != self.position:
                         
 
 
-                            if board[ul][fallback_x-(ul-fallback_y)][0] != self.name[0]:
+                            if board[ul][fallback_x-(ul-fallback_y)][0] != self.name[0] and board[ul][fallback_x-(ul-fallback_y)][2] != "K":
                                 move_list.append(f"{ul},{fallback_x-(ul-fallback_y)}")
 
 
@@ -323,12 +320,12 @@ class Piece:
                     pass
                     
 
-            return move_list,board
+        return move_list,board
     
     
     
     
-    def possible_moves_king(self, board): # momves and takes with caution, no castling though
+    def possible_moves_king(self, board, Black_up, Pieces): # momves and takes with caution, no castling though
         if self.on_board:
             move_list = []
 
@@ -340,6 +337,7 @@ class Piece:
                             if board[y][x][0] != self.name[0]: # so that the king can take the pieces
 
                                 if self.name[0] == "W":
+                                    # print(board[y][x][8] )
                                     if x >=0 and y >= 0 and board[y][x][8] != "1" and board[y][x][2] != "K": # if the piecce is unprotected, the move is added to the move_list
                                         move_list.append(f"{y},{x}")
                                         board[y][x] = board[y][x][:6] + "1"+ board[y][x][7:]
@@ -360,35 +358,91 @@ class Piece:
                             pass
 
             # the castling logic must be here
-                            
+            Wrh = None
+            Wra = None
+            Brh = None
+            Bra = None
+            for i in range(len(Pieces)):
+                if Pieces[i].name == "WRH":
+                    Wrh = Pieces[i]
+                elif Pieces[i].name == "WRA":
+                    Wra = Pieces[i]
+                elif Pieces[i].name == "BRH":
+                    Brh = Pieces[i]
+                elif Pieces[i].name == "BRA":
+                    Bra = Pieces[i]
+
+            if Black_up:
+                if self.name == "WKK":
+                    if Wrh != None:
+                        if board[7][6][8] != "1" and board[7][5][8] != "1" and board[7][6][:3] == "nnn" and board[7][5][:3] == "nnn" and King.Checked(self,board) == False and Wrh.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{7},{6}")
+                    if Wra != None:
+                        if board[7][3][8] != "1" and board[7][2][8] != "1" and board[7][2][:3] == "nnn" and board[7][3][:3] == "nnn" and King.Checked(self,board) == False and Wra.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{7},{2}")
+                elif self.name == "BKK":
+                    if Brh != None:
+                        if board[0][6][6] != "1" and board[0][5][6] != "1" and board[0][5][:3] == "nnn" and board[0][6][:3] == "nnn" and King.Checked(self,board) == False and Brh.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{0},{6}")
+                    if Bra != None:
+                        if board[0][3][6] != "1" and board[0][2][6] != "1" and board[0][2][:3] == "nnn" and board[0][3][:3] == "nnn" and King.Checked(self,board) == False and Wra.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{0},{2}")
+            else:
+                if self.name == "WKK":
+                    if Wrh != None:
+                        if board[0][1][8] != "1" and board[0][2][8] != "1" and board[0][1][:3] == "nnn" and board[0][2][:3] == "nnn" and King.Checked(self,board) == False and Wrh.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{0},{1}")
+                    if Wra != None:
+                        if board[0][5][8] != "1" and board[0][4][8] != "1" and board[0][5][:3] == "nnn" and board[0][4][:3] == "nnn" and King.Checked(self,board) == False and Wra.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{0},{5}")
+                if self.name == "BKK":
+                    if Brh != None:
+                        if board[7][1][6] != "1" and board[7][2][6] != "1" and board[7][1][:3] == "nnn" and board[7][2][:3] == "nnn" and King.Checked(self,board) == False and Brh.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{7},{1}")
+                    if Bra != None:
+                        if board[7][5][6] != "1" and board[7][4][6] != "1" and board[7][5][:3] == "nnn" and board[7][4][:3] == "nnn" and King.Checked(self,board) == False and Bra.ever_moved == False and self.ever_moved == False:
+                            move_list.append(f"{7},{5}")
+
+
+
             return move_list, board
         
 
 
 
-    def Move_n_Take(self,new_coords,board,Pieces): # not debugged
+    def Move_n_Take(self,new_coords,board,Pieces,Black_up): # not debugged
+        if Black_up:
+            wierd_coords = [(7,6),(0,6),(7,2),(0,2)]
+        else:
+            wierd_coords = [(0,1),(7,1),(0,5),(7,5)]
 
-        if self.name[1:2] == "KK" and self.ever_moved == False and (new_coords == (7,6) or new_coords == (0,6)):
-            board = self.short_castling()
-        elif self.name[1:2] == "KK" and self.ever_moved == False and (new_coords == (7,2) or new_coords == (0,2)):
-            board = self.long_castling()
+        if self.name[1:3] == "KK" and self.ever_moved == False and new_coords in wierd_coords and Black_up:
+                if new_coords == (7,6) or new_coords == (0,6):
+                    board = self.short_castling(new_coords,board,Black_up) # CAN SHORTEN IT MANY TIMES 
+                elif new_coords == (7,2) or new_coords == (0,2):
+                    board = self.long_castling(new_coords,board,Black_up)
+        elif self.name[1:3] == "KK" and self.ever_moved == False and new_coords in wierd_coords and Black_up == False:
+                if new_coords == (0,1) or new_coords == (7,1):
+                    board = self.short_castling(new_coords,board,Black_up)
+                elif new_coords == (0,5) or new_coords == (7,5):
+                    board = self.long_castling(new_coords,board,Black_up)
+
         else:
             # the taking infrastructure
             #cell_content = board[new_coords[0]][new_coords[1]][:3]
             #if cell_content == "nnn":
             #    pass
             cell_part_1 = board[new_coords[0]][new_coords[1]][3:] # put a new piece on the cell 
-            #print(board[new_coords[0]][new_coords[1]][3:])
+                #print(board[new_coords[0]][new_coords[1]][3:])
             board[new_coords[0]][new_coords[1]] = self.name + cell_part_1    
             cell_part_2 = board[self.position[0]][self.position[1]][3:]
-            #print(board[self.position[0]][self.position[1]])
+                #print(board[self.position[0]][self.position[1]])
             board[self.position[0]][self.position[1]] = "nnn" + cell_part_2
-            #print("previous cell: ",board[self.position[0]][self.position[1]])
+                #print("previous cell: ",board[self.position[0]][self.position[1]])
             self.ever_moved = True
 
             self.Find_yourself(board)
         return board
-
     def Find_yourself(self,board): # not debugged
         # if you can't find yourself on the board, then you're off the board
         test_coordinates = [-1,-1]
@@ -407,20 +461,20 @@ class Piece:
     
 
 class Pawn(Piece): # moves finished, need to solve the promoted issue
-    def possible_moves(self,board,Black_up):
+    def possible_moves(self,board,Black_up,p):
         return self.possible_moves_pawn(board,Black_up) # returns only the move_list
 class Rook(Piece): # moves finished
-    def possible_moves(self,board,Black_up):
+    def possible_moves(self,board,Black_up,p):
         return self.possible_moves_rook(board)# returns the move_list and the board
 class Knight(Piece): # moves finished
     
-    def possible_moves(self,board,Black_up):
+    def possible_moves(self,board,Black_up,p):
         return self.possible_moves_knight(board) # returns both the board and the move_list
 class Bishop(Piece): # moves finished
-    def possible_moves(self, board,Black_up):
+    def possible_moves(self, board,Black_up,Pieces):
         return self.possible_moves_bishop(board) # returns the board too
 class Queen(Piece): # moves finished
-    def possible_moves(self,board,Black_up):
+    def possible_moves(self,board,Black_up,Pieces):
         move_list1, b = self.possible_moves_bishop(board)
         move_list2, b = self.possible_moves_rook(board)
 
@@ -432,38 +486,75 @@ class Queen(Piece): # moves finished
             actual_move_list.append(move_list2[i])
         return actual_move_list, b
 class King(Piece): # moves finished
-    def possible_moves(self,board,Black_up):
-        return self.possible_moves_king(board)
-    def short_castling(self,new_coords, board): # not debugged
-        if new_coords == (7,6):
-                board[7][6] = board[7][6].replace("nnn",self.name)
-                board[7][5] = board[7][5].replace("nnn",f"{self.name[0]}RH")
-                self.ever_moved = True
+    def possible_moves(self,board,Black_up,Pieces):
+        return self.possible_moves_king(board,Black_up,Pieces)
+    def short_castling(self,new_coords, board,black_up): # not debugged
+        if black_up:
+            if new_coords == (7,6):
+                    board[7][6] = board[7][6].replace("nnn",self.name)
+                    board[7][5] = board[7][5].replace("nnn",f"{self.name[0]}RH")
 
-        elif new_coords == (0,6):
-                board[0][6] = board[0][6].replace("nnn",self.name)
-                board[0][5] = board[0][5].replace("nnn",f"{self.name[0]}RH")
-                self.ever_moved = True # the pieces need to find themselves
+                    board[7][4] = board[7][4].replace(self.name,"nnn")
+                    board[7][7] = board[7][7].replace(f"{self.name[0]}RH","nnn")
+
+
+            elif new_coords == (0,6):
+                    board[0][6] = board[0][6].replace("nnn",self.name)
+                    board[0][5] = board[0][5].replace("nnn",f"{self.name[0]}RH")
+
+                    board[0][4] = board[0][4].replace(self.name,"nnn")
+                    board[0][7] = board[0][7].replace(f"{self.name[0]}RH","nnn")
+        else:
+            if new_coords == (0,1):
+                    board[0][1] = board[0][1].replace("nnn",self.name)
+                    board[0][2] = board[0][2].replace("nnn",f"{self.name[0]}RH")
+
+                    board[0][3] = board[0][3].replace(self.name,"nnn")
+                    board[0][0] = board[0][0].replace(f"{self.name[0]}RH","nnn")
+
+
+            if new_coords == (7,1):
+                    board[7][1] = board[7][1].replace("nnn",self.name)
+                    board[7][2] = board[7][2].replace("nnn",f"{self.name[0]}RH")
+
+                    board[7][3] = board[7][3].replace(self.name,"nnn")
+                    board[7][0] = board[7][0].replace(f"{self.name[0]}RH","nnn")
+
+        self.ever_moved = True
         return board
-    def long_castling(self,new_coords, board, Pieces): # not debugged
+    def long_castling(self,new_coords, board,black_up): # not debugged
+        if black_up:
+            if new_coords == (7,2):
+                    board[7][2] = board[7][2].replace("nnn",self.name)
+                    board[7][3] = board[7][3].replace("nnn",f"{self.name[0]}RA")
 
-        if new_coords == (7,2):
-                board[7][2] = board[7][2].replace("nnn",self.name)
-                board[7][3] = board[7][3].replace("nnn",f"{self.name[0]}RH")
-                self.ever_moved = True
+                    board[7][4] = board[7][4].replace(self.name,"nnn")
+                    board[7][0] = board[7][0].replace(f"{self.name[0]}RA","nnn")
+                    self.ever_moved = True
 
-        elif new_coords == (0,2):
-                board[0][2] = board[0][2].replace("nnn",self.name)
-                board[0][3] = board[0][3].replace("nnn",f"{self.name[0]}RH")
-                self.ever_moved = True # the pieces need to find themselves
-        
-        rook_name = f"{self.name[0]}RH"
-        for i in range(0,len(Pieces)):
-            if  rook_name == Pieces[i].name: # find the piece that was taken in the pieces list
-                rook_name = Pieces[i]
-        
-        self.Find_yourself(rook_name,board) # for the rook
-        self.Find_yourself(board) # for the king
+            elif new_coords == (0,2):
+                    board[0][2] = board[0][2].replace("nnn",self.name)
+                    board[0][3] = board[0][3].replace("nnn",f"{self.name[0]}RA")
+
+
+                    board[0][4] = board[0][4].replace(self.name,"nnn")
+                    board[0][0] = board[0][0].replace(f"{self.name[0]}RA","nnn")
+                    self.ever_moved = True # the pieces need to find themselves
+        else:
+            if new_coords == (7,5):
+                    board[7][5] = board[7][5].replace("nnn",self.name)
+                    board[7][4] = board[7][4].replace("nnn",f"{self.name[0]}RA")
+
+
+                    board[7][3] = board[7][3].replace(self.name,"nnn")
+                    board[7][7] = board[7][7].replace(f"{self.name[0]}RA","nnn")
+            elif new_coords == (0,5): 
+                    board[0][5] = board[0][5].replace("nnn",self.name)
+                    board[0][4] = board[0][4].replace("nnn",f"{self.name[0]}RA")
+
+
+                    board[0][4] = board[0][4].replace(self.name,"nnn")
+                    board[0][7] = board[0][7].replace(f"{self.name[0]}RA","nnn")
 
         return board
     def Checked(self, board): # works
@@ -476,8 +567,8 @@ class King(Piece): # moves finished
         
         # function that will check if a king is checked
         return False
-    def Mated(self,board): # works
-        move_list,board = self.possible_moves(board)
+    def Mated(self,board,Black_up): # works
+        move_list,board = self.possible_moves(board,Black_up)
         if len(move_list) == 0:
             return True
         else:
@@ -486,8 +577,8 @@ class King(Piece): # moves finished
 def Board_set_up(size,black_up): # finished
     List =  ["WRA", "WKB", "WBC", "WQQ", "WKK", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]
     List2 = ["BRA", "BKB", "BBC", "BQQ", "BKK", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
-    List3 =  ["WRA", "WKB", "WBC","WKK", "WQQ", "WBF", "WKG", "WRH", "WPA", "WPB", "WPC", "WPD", "WPE", "WPF", "WPG", "WPH"]    
-    List4 = ["BRA", "BKB", "BBC", "BKK", "BQQ", "BBF", "BKG", "BRH", "BPA", "BPB", "BPC", "BPD", "BPE", "BPF", "BPG", "BPH"]
+    List3 =  ["WRH", "WKG", "WBF","WKK", "WQQ", "WBC", "WKB", "WRA", "WPH", "WPG", "WPF", "WPE", "WPD", "WPC", "WPB", "WPA"]    
+    List4 = ["BRH", "BKG", "BBF", "BKK", "BQQ", "BBC", "BKB", "BRA", "BPH", "BPG", "BPF", "BPE", "BPD", "BPC", "BPB", "BPA"]
 
 
     board = [["0" for i in range(size)] for j in range(size)]
@@ -556,8 +647,8 @@ def Create_Pieces(black_is_up): # finished
                 elif Pieces_list[i][0] == "W":
                     name = Pawn(True, (Dictionary[Pieces_list[i][0]+"W"]+1,Dictionary[Pieces_list[i][2]]),Pieces_list[i])
             
-            
         New_pieces_list.append(name)
+
     return New_pieces_list
 
 def find_a_piece_by_position(board, Pieces, start_x, start_y, coordinates, tile_size):
@@ -571,8 +662,8 @@ def find_a_piece_by_position(board, Pieces, start_x, start_y, coordinates, tile_
             return counter
         counter += 1
 
-def find_possible_moves(Piece,board,BLACK_UP):
-    return Piece.possible_moves(board,BLACK_UP)
+def find_possible_moves(Piece,board,BLACK_UP,Pieces=[]):
+    return Piece.possible_moves(board,BLACK_UP,Pieces)
 def find_recs_for_possible_moves(move_list,start_x, start_y,tile_size):
     List_of_rects = []
     for i in range(len(move_list)):

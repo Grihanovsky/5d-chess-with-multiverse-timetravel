@@ -28,7 +28,7 @@ font = pygame.font.Font(None, tile_size//4)
 bulb,bulb_rect = ui_dark[0][0],ui_dark[1][0]
 gear,gear_rect = ui_dark[0][1],ui_dark[1][1]
 
-Black_is_up = True
+Black_is_up = False
 Pieces = logic.Create_Pieces(Black_is_up)
 
 board = logic.Board_set_up(8,Black_is_up)
@@ -40,6 +40,7 @@ selected = False
 selected_piece = ""
 targeted_cells_rects = []
 index_longterm = -1
+
 
 running = True
 while running:
@@ -62,12 +63,13 @@ while running:
 				board = logic.Board_set_up(8,Black_is_up)
 				turn =0 
 				selected = False
+				move_list = []
 
 			for i in range(len(targeted_cells_rects)):
 				if targeted_cells_rects[i].collidepoint(event.pos):
 					#print(f"Tried to move to {targeted_cells_rects[i]} with {Pieces[index_longterm].name}")
-					try:
-						board = logic.Piece.Move_n_Take(Pieces[index_longterm],(int(move_list[i][0]),int(move_list[i][2])),board,Pieces)
+					# try:
+						board = logic.Piece.Move_n_Take(Pieces[index_longterm],(int(move_list[i][0]),int(move_list[i][2])),board,Pieces,Black_is_up)
 						#print(move_list)
 						turn += 1
 
@@ -78,13 +80,26 @@ while running:
 						for i in range(len(Pieces)):
 							# print(Pieces[i].name[1])
 								# print('got here')
-							# if Pieces[i].name[1] == "K" and Pieces[i].name[1] == "K" or Pieces:
-								move_list,board = logic.find_possible_moves(Pieces[i],board,Black_is_up)
+
+							move_list,board = logic.find_possible_moves(Pieces[i],board,Black_is_up,Pieces)
+
+						if turn == 4:
+							pass
+
+						for i in range(len(Pieces)):
+							if Pieces[i].name[2] == "K":
+								
+								# print(turn,Pieces[i].name,move_list)
+								if logic.King.Checked(Pieces[i],board):
+									if logic.King.Mated(Pieces[i],board,Black_is_up):
+										print("The game is over")
+										running = False
 
 
-					except:
-						pass
-					move_list = []
+
+					# except:
+						# pass
+						move_list = []
 
 
 			if board_rect.collidepoint(event.pos):
@@ -97,7 +112,7 @@ while running:
 					if players[turn % 2] == Pieces[index].name[0]:
 						#print(Pieces[index].name)
 
-						move_list,board = logic.find_possible_moves(Pieces[index],board,Black_is_up)
+						move_list,board = logic.find_possible_moves(Pieces[index],board,Black_is_up,Pieces)
 						targeted_cells_rects = logic.find_recs_for_possible_moves(move_list,start_x, start_y,tile_size)
 						index_longterm = index
 
@@ -116,7 +131,8 @@ while running:
 
 	new_graphics.draw_board(window,tile_size,start_x,start_y,colours,font,Black_is_up)
 
-	if turn == 4:
+	if turn == 8:
+		print(f"turn {turn}")
 		for i in range(len(board)):
 			print(board[i])
 		turn += 2
